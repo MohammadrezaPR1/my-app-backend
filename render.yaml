@@ -1,0 +1,29 @@
+# فایل تنظیمات Render.com برای Deploy خودکار
+
+services:
+  # Backend Service
+  - type: web
+    name: news-website-backend
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_NAME
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_HOST
+        sync: false
+      - key: DB_DIALECT
+        value: mysql
+      - key: ACCESS_TOKEN_SECRET
+        generateValue: true
+      - key: REFRESH_TOKEN_SECRET
+        generateValue: true
+      - key: FRONTEND_URL
+        sync: false
+    healthCheckPath: /health
