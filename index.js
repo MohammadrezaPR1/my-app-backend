@@ -18,6 +18,11 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
+// CORS origins: متغیر محیطی + همه subdomain های Vercel پروژه
+const allowedOrigins = [
+    ...FRONTEND_URL.split(',').map(url => url.trim()),
+];
+
 try {
     await db.authenticate();
     console.log("Database connected !");
@@ -30,7 +35,18 @@ try {
 // CORS Configuration
 app.use(cors({
     credentials: true,
-    origin: FRONTEND_URL.split(',').map(url => url.trim()) // پشتیبانی از چند origin
+    origin: function (origin, callback) {
+        // درخواست‌های بدون origin (مثل Postman) را قبول کن
+        if (!origin) return callback(null, true);
+        // اگر origin در لیست مجاز است یا subdomain Vercel پروژه است
+        if (
+            allowedOrigins.includes(origin) ||
+            /^https:\/\/my-app-frontend-z6u1[^.]*\.vercel\.app$/.test(origin)
+        ) {
+            return callback(null, true);
+        }
+        return callback(new Error('Not allowed by CORS'));
+    }
 }));
 
 app.use(express.json());
