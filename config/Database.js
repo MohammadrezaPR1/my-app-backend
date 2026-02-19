@@ -25,4 +25,3 @@ const db = new Sequelize(
 export default db; 
 
 
-//  railway domain :mysql-production-9b79.up.railway.app
