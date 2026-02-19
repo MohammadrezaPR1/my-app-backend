@@ -21,7 +21,7 @@ const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 try {
     await db.authenticate();
     console.log("Database connected !");
-    await db.sync({ alter: true });
+    // await db.sync({ alter: true });
 } catch (error) {
     console.log(`We have some error :
      ${error}`);
