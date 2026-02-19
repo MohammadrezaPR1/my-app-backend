@@ -115,6 +115,8 @@ export const Login = async (req, res) => {
     //  قرار دادن رفرش توکن داخل کوکی مرورگر کاربر
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 24 * 60 * 60 * 1000,
     });
 
