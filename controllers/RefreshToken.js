@@ -3,25 +3,22 @@ import Users from "../models/userModel.js";
 
 export const refreshToken = async (req, res) => {
   try {
-    // 1
-    const refreshToken = req.cookies.refreshToken;
-    // 2
-    if (!refreshToken) return res.sendStatus(401).json("توکنی یافت نشد");
-    // 3
+    // ابتدا از کوکی، اگر نبود از body می‌خوانیم (fallback برای Safari iOS که cross-site cookie را block می‌کند)
+    const token = req.cookies.refreshToken || req.body.refreshToken;
+    if (!token) return res.sendStatus(401);
+
     const user = await Users.findAll({
       where: {
-        refresh_token: refreshToken,
+        refresh_token: token,
       },
     });
-    // 4
-    if (!user[0]) return res.sendStatus(403).json("کاربری یافت نشد");
-    // 5
+    if (!user[0]) return res.sendStatus(403);
+
     jwt.verify(
-      refreshToken,
+      token,
       process.env.REFRESH_TOKEN_SECRET,
       (err, decoded) => {
-        if (err)
-          return res.sendStatus(403).json("توکن مورد منقرض شده یا دستکاری شده");
+        if (err) return res.sendStatus(403);
         const userId = user[0].id;
         const name = user[0].name;
         const email = user[0].email;

@@ -120,8 +120,10 @@ export const Login = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
+    // refreshToken را هم در body برمی‌گردانیم تا Safari iOS که cross-site cookie را block می‌کند بتواند آن را در localStorage ذخیره کند
     res.json({
       accsessToken,
+      refreshToken,
       userId,
       name,
       email,
@@ -137,12 +139,12 @@ export const Login = async (req, res) => {
 // تابع خروج کاربر .پاک کردن کوکی ایجاد شده از مرورگر و رفرش توکن ذخیره شده در پایگاه
 export const Logout = async (req, res) => {
   try {
-    const refreshToken = req.cookies.refreshToken;
+    // ابتدا از کوکی، سپس از body می‌خوانیم (برای Safari iOS که کوکی را ذخیره نمی‌کند)
+    const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
     if (!refreshToken) return res.json("توکن پیدا نشد");
     const user = await Users.findOne({
       where: { refresh_token: refreshToken },
     });
-    // res.json(user)
     if (!user) return res.json({error:"کاربری یافت نشد "});
     const clr = null;
     await Users.update(

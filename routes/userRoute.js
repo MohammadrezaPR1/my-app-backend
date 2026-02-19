@@ -11,7 +11,7 @@ const router = express.Router();
 router.get("/get-users",getUsers)
 
 // مسیر های ادمین 
-router .get("/token",refreshToken)
+router.post("/token",refreshToken)
 router.get("/users",verifyToken,getAllUsers)
 router.post("/users/register",Register)
 router.post("/users/login",Login)
