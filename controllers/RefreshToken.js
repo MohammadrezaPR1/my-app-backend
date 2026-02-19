@@ -30,7 +30,7 @@ export const refreshToken = async (req, res) => {
           { userId, name, email, isAdmin },
           process.env.ACCSESS_TOKEN_SECRET,
           {
-            expiresIn: "45s",
+            expiresIn: "15m",
           }
         );
         res.json({ accsessToken });

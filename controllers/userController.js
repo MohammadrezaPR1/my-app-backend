@@ -92,7 +92,7 @@ export const Login = async (req, res) => {
     const accsessToken = jwt.sign(
       { userId, name, email, isAdmin },
       process.env.ACCSESS_TOKEN_SECRET,
-      { expiresIn: "45S" }
+      { expiresIn: "15m" }
     );
 
     // CREATE REFRESH_TOKEN
