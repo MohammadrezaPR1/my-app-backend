@@ -10,9 +10,16 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload";
 import cors from "cors";
+import fs from "fs";
 
 
 dotenv.config();
+
+// اطمینان از وجود فولدرهای آپلود (Railway فولدر خالی را نگه نمی‌دارد)
+fs.mkdirSync("./public/images", { recursive: true });
+fs.mkdirSync("./public/videos", { recursive: true });
+fs.mkdirSync("./public/avatars", { recursive: true });
+
 const app = express();
 
 const PORT = process.env.PORT || 5000;
